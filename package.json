@@ -1,0 +1,24 @@
+{
+  "name": "webRTC-video-chat",
+  "version": "1.0.0",
+  "description": "基于 webRTC 搭建的低配版视频通话应用（包括客户端与信令服务）",
+  "main": "server/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Zenfeder/webRTC-video-chat.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Zenfeder/webRTC-video-chat/issues"
+  },
+  "homepage": "https://github.com/Zenfeder/webRTC-video-chat#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "socket.io": "^2.3.0"
+  }
+}

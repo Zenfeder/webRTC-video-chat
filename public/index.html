@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>webRTC 视频通话</title>
+  <style>
+    #root {
+      box-sizing: border-box;
+      width: 100%;
+      height: 100vh;
+      padding: 10px 0;
+    }
+    .box {
+      padding: 10px;
+      border:1px solid #eee;
+      border-radius: 5px;
+      margin-bottom: 20px;
+    }
+    input {
+      width: 200px;
+      height: 20px;
+    }
+    #box-video {
+      display: none;
+    }
+    #box-video-receiver-handle {
+      display: none;
+      text-align: center;
+    }
+    .receiver-btns {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+    }
+  </style>
+</head>
+<body>
+  <div id="root">
+    <!-- 区域A：为自己取个昵称 -->
+    <div class="box" id="box-me">
+      <input id="input-me" placeholder="请输入你的昵称（最长10个字）" maxlength="10"/>
+      <button id="btn-confirm">确认</button>
+    </div>
+    
+    <!-- 区域B：发起视频通话邀请 -->
+    <div class="box" id="box-invite">
+      <!-- 发送控制区 -->
+      <div id="invite-form">
+        <input id="input-receiver" placeholder="请输入对方的昵称（最长10个字）" maxlength="10"/>
+        <button id="btn-invite">发起视频</button>
+      </div>
+      
+      <!-- 发送方才能看到的反馈信息区域 -->
+      <div id="box-video-sender-handle"></div>
+
+      <!-- 接收方才能看到的操作区域 -->
+      <div id="box-video-receiver-handle">
+        <p id="sender-msg"></p>
+        <div class="receiver-btns">
+          <button id="btn-accept">接收</button>
+          <button id="btn-reject">拒绝</button>
+        </div>
+      </div>
+
+      <div class="box-video-stream">
+        <!-- <video/> -->
+      </div>
+    </div>
+
+  </div>
+</body>
+<script src="/lib/socket.io.js"></script>
+<script src="/scripts/client.js"></script>
+</html>
