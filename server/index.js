@@ -60,9 +60,10 @@ io.on('connection', socket => {
 
   /**
    * webRTC 信令
-   * 建立对等链接
    */
-  
+
+  // 1. 建立对等链接（Initiating peer connections）
+
   // 对等链接信令的发起者发来的消息，需要传递给对等链接的接收者（receiver）
   socket.on('message with offer', ({ receiver, offer }) => {
     console.log(`发起者起对等链接，接收者为 ${receiver.nickname}, ${receiver.socketId}`);
@@ -73,6 +74,12 @@ io.on('connection', socket => {
   socket.on('message with answer', ({ sender, answer }) => {
     console.log(`接收者回复对等链接请求，发起者为 ${sender.nickname}, ${sender.socketId}`);
     io.to(sender.socketId).emit('message', { answer });
+  });
+
+  // 2. 交换（本地与远端的）ICE 候选人（Trickle ICE）
+  socket.on('new-ice-candidate', ({ receiver, candidate }) => {
+    console.log(`Trickle ICE，receiver: ${receiver.nickname}`);
+    io.to(receiver.socketId).emit('message', { iceCandidate: candidate });
   });
 
   socket.on('disconnect', () => {

@@ -126,8 +126,9 @@
 
   /**
    * webRTC 信令
-   * 建立对等连接
    */
+
+  //1. 建立（本地与远端之间的）对等连接（Initiating peer connections）
   const configuration = {'iceServers': [{'urls': 'stun:stun.l.google.com:19302'}]};
   // 发起方
   async function makeCall() {
@@ -153,6 +154,26 @@
       await peerConnection.setLocalDescription(answer);
       console.log('接收方收到发送方的 offer：', message);
       socket.emit('message with answer', { 'sender': senderInfo, 'answer': answer });
+    }
+  });
+
+  // 2. 收集与交换（本地与远端的）ICE 候选人（Trickle ICE）
+  // 在本地 RTCPeerConnection 上监听本地 ICE 候选人，并通过websocket建立的信道把 ICE 候选人发送给远端（receiver）
+  peerConnection.onicecandidate = function(event) {
+    console.log('local icecandidate');
+    if (event.candidate) {
+      socket.emit('new-ice-candidate', { 'receiver': receiverInfo, 'candidate': event.candidate });
+    }
+  };
+
+  // 监听远端（receiver）通过 websocket 信道发送过来的 ICE 候选人，并将它们添加到本地 RTCPeerConnection
+  socket.on('message', async function(message) {
+    if (message.iceCandidate) {
+      try {
+        await peerConnection.addIceCandidate(message.iceCandidate);
+      } catch (e) {
+        console.error('添加已收到的 ice candidate 的过程中出了点问题', e);
+      }
     }
   });
 })();
